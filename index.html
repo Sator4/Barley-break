@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пятнашки</title>
+    <style>
+        td {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            font-size: 35px;
+            background-color: #44ff44ad;
+            border-width: 2px;
+        }
+        body {
+            background-color: #1f87f681;
+        }
+    </style>
+</head>
+<body>
+    <table align="center" border="4px">   <!-- 3  #  -->
+        <tr>
+            <td id="0"></td>
+            <td id="1">1</td>
+            <td id="2">2</td>
+            <td id="3">3</td>
+        </tr>
+        <tr>
+            <td id="4">4</td>
+            <td id="5">5</td>
+            <td id="6">6</td>
+            <td id="7">7</td>
+        </tr>
+        <tr>
+            <td id="8">8</td>
+            <td id="9">9</td>
+            <td id="10">10</td>
+            <td id="11">11</td>
+        </tr>
+        <tr>
+            <td id="12">12</td>
+            <td id="13">13</td>
+            <td id="14">14</td>
+            <td id="15">15</td>
+        </tr>
+    </table>
+    <script>
+        let where_zero = 0;
+
+        function win(){
+            for (let i = 0; i < 16; i++){
+                if (document.getElementById(i).innerHTML != i){
+                    return false;
+                }
+            }
+            return true;
+        }
+        function swap(from, to){
+            document.getElementById(to).innerHTML = document.getElementById(from).innerHTML;
+            document.getElementById(from).innerHTML = "";
+            where_zero = from;
+            if (checking_for_win){
+                if (win()){
+                    checking_for_win = false;
+                    alert("You win!");
+                }
+            }
+        }
+        function check(number){
+            if (number < 0 || number > 15){
+                return;
+            }
+            if (document.getElementById(number).innerHTML == ""){
+                return;
+            }
+            if (number % 4 > 0){
+                if (document.getElementById(number - 1).innerHTML == ""){ // check left
+                    swap(number, number - 1);
+                    return;
+                }
+            }
+            if (number > 3){
+                if (document.getElementById(number - 4).innerHTML == ""){ // check down
+                    swap(number, number - 4);
+                    return;
+                }
+            }
+            if (number < 12){
+                if (document.getElementById(number + 4).innerHTML == ""){ // check up
+                    swap(number, number + 4);
+                    return;
+                }
+            }
+            if ((number + 1) % 4 > 0){
+                if (document.getElementById(number + 1).innerHTML == ""){ // check right
+                    swap(number, number + 1);
+                    return;
+                }
+            }
+        }
+        
+        let checking_for_win = false;
+        for (let i = 0; i < 1000; i++){
+            let cur = Math.floor(Math.random() * 4);
+            switch (cur){
+                case 0:
+                    check(where_zero - 4);
+                    break;
+                case 1:
+                    check(where_zero - 1);
+                    break;
+                case 2:
+                    check(where_zero + 1);
+                    break;
+                case 3:
+                    check(where_zero + 4);
+                    break;
+            }
+        }
+        checking_for_win = true;
+        
+
+        for (let i = 0; i < 16; i++){
+            document.getElementById(i).onclick = () => {check(i)};
+        }
+    </script>
+</body>
+</html>
